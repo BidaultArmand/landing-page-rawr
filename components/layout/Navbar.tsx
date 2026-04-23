@@ -58,13 +58,7 @@ export const Navbar: React.FC = () => {
   }));
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-300 ${
-        isScrolled
-          ? 'backdrop-blur-[12px]'
-          : ''
-      }`}
-    >
+    <nav className="fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-300">
       <div className="max-w-[1280px] mx-auto h-full px-[clamp(24px,4vw,64px)] grid grid-cols-[1fr_auto_1fr] items-center gap-8">
         {/* COLONNE 1 — LOGO (gauche) */}
         <div className="justify-self-start">
