@@ -59,22 +59,13 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-4 left-4 right-4 z-50 h-[72px] transition-all duration-300 rounded-2xl ${
+      className={`fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/92 backdrop-blur-[12px] border border-black/6'
-          : 'bg-white border border-black/4'
+          ? 'backdrop-blur-[12px]'
+          : ''
       }`}
-      style={
-        isScrolled
-          ? {
-              boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-            }
-          : {
-              boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
-            }
-      }
     >
-      <div className="max-w-[1280px] mx-auto h-full px-[clamp(24px,4vw,48px)] grid grid-cols-[1fr_auto_1fr] items-center gap-8">
+      <div className="max-w-[1280px] mx-auto h-full px-[clamp(24px,4vw,64px)] grid grid-cols-[1fr_auto_1fr] items-center gap-8">
         {/* COLONNE 1 — LOGO (gauche) */}
         <div className="justify-self-start">
           <Link href="/" className="inline-block">
