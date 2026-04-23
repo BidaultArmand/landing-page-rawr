@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="pt-[72px]">
+      <main className="pt-[100px]">
         {/* Hero Section */}
         <section id="hero">
           <Hero />

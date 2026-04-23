@@ -28,9 +28,9 @@ export const Sheet: React.FC<SheetProps> = ({
   }, [isOpen]);
 
   const sideClasses = {
-    top: 'top-[72px] left-0 right-0 h-auto max-h-[calc(100vh-72px)] rounded-b-2xl',
-    right: 'top-[72px] right-0 bottom-0 w-full sm:w-80 rounded-l-2xl',
-    left: 'top-[72px] left-0 bottom-0 w-full sm:w-80 rounded-r-2xl',
+    top: 'top-[100px] left-0 right-0 h-auto max-h-[calc(100vh-100px)] rounded-b-2xl',
+    right: 'top-[100px] right-0 bottom-0 w-full sm:w-80 rounded-l-2xl',
+    left: 'top-[100px] left-0 bottom-0 w-full sm:w-80 rounded-l-2xl',
   };
 
   return (
