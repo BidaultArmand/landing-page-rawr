@@ -1,5 +1,5 @@
 import { Navbar, Footer } from "@/components/layout";
-import { Hero } from "@/components/sections";
+import { Hero, Histoire, CTADownload, Mission, HowItWorks } from "@/components/sections";
 
 export default function Home() {
   return (
@@ -12,52 +12,27 @@ export default function Home() {
         </section>
 
         {/* Mission Section */}
-        <section
-          id="mission"
-          className="bg-rawr-beige py-[clamp(80px,10vw,140px)]"
-        >
-          <div className="text-center">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-rawr-black">
-              Mission Section (To be built)
-            </h2>
-          </div>
+        <section id="mission">
+          <Mission />
         </section>
 
         {/* How It Works Section */}
-        <section
-          id="how-it-works"
-          className="bg-rawr-white py-[clamp(80px,10vw,140px)]"
-        >
-          <div className="text-center">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-rawr-black">
-              How It Works Section (To be built)
-            </h2>
-          </div>
+        <section id="how-it-works">
+          <HowItWorks />
         </section>
 
         {/* Histoire Section */}
-        <section
-          id="histoire"
-          className="bg-rawr-beige py-[clamp(80px,10vw,140px)]"
-        >
-          <div className="text-center">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-rawr-black">
-              Our Story Section (To be built)
-            </h2>
-          </div>
+        <section id="histoire">
+          <Histoire />
         </section>
 
         {/* CTA Section */}
-        <section
-          id="download"
-          className="bg-rawr-purple-lt py-[clamp(80px,10vw,140px)]"
-        >
-          <div className="text-center">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-rawr-black">
-              CTA Section (To be built)
-            </h2>
-          </div>
+        <section id="download" className="py-[clamp(80px,10vw,140px)]">
+          <CTADownload />
         </section>
+
+        {/* FAQ Section - Placeholder */}
+        <section id="faq" className="py-16" />
       </main>
       <Footer />
     </>
