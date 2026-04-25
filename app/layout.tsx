@@ -13,9 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RAWR — The Dating App for Dog Owners",
-  description:
-    "Swipe your dog's way to friendship. The dating app where your dog finds the perfect match.",
+  title: "Rawr — Trouve le meilleur ami de ton chien",
+  description: "Swipez sur les profils des chiens, rencontrez leurs propriétaires. L'app de rencontres pour propriétaires de chiens.",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🐾</text></svg>",
+  },
 };
 
 export default function RootLayout({

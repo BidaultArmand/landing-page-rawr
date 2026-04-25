@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 export const useInView = (
   triggerOnce: boolean = true,
   threshold: number = 0.15
-): [React.RefObject<HTMLDivElement>, boolean] => {
+): [React.RefObject<HTMLDivElement | null>, boolean] => {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 

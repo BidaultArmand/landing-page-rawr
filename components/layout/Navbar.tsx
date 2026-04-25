@@ -24,8 +24,6 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { label: 'Comment ça marche', href: '#how-it-works' },
     { label: 'Notre Mission', href: '#mission' },
-    { label: 'Notre Histoire', href: '#histoire' },
-    { label: 'FAQ', href: '#faq' },
   ];
 
   const languages = [
@@ -58,10 +56,10 @@ export const Navbar: React.FC = () => {
   }));
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-300">
-      <div className="max-w-[1280px] mx-auto h-full px-[clamp(24px,4vw,64px)] grid grid-cols-[1fr_auto_1fr] items-center gap-8">
+    <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style={{ backgroundColor: "transparent" }}>
+      <div className="max-w-[1280px] mx-auto px-[clamp(24px,4vw,64px)] relative flex items-center h-28 gap-12">
         {/* COLONNE 1 — LOGO (gauche) */}
-        <div className="justify-self-start">
+        <div className="flex-shrink-0">
           <Link href="/" className="inline-block">
             {!logoError ? (
               <Image
@@ -84,13 +82,13 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* COLONNE 2 — PILL NAVIGATION (centre, desktop uniquement) */}
-        <div className="justify-self-center hidden md:flex items-center bg-white border-[1.5px] border-[#E8E8E8] rounded-full px-1.5 py-1.5 gap-0.5 shadow-sm">
+        <div className="w-fit justify-center hidden md:flex items-center bg-white border-[1.5px] border-[#E8E8E8] rounded-lg px-6 gap-5" style={{height: '60px', position: 'absolute', left: '50%', transform: 'translateX(-50%)'}}>
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={handleSmoothScroll}
-              className="px-5 py-2.25 text-[15px] font-medium text-[#333333] rounded-full whitespace-nowrap transition-all duration-200 hover:bg-[#F2F2F2] hover:text-black"
+              className="px-6 py-2.5 text-[15px] font-medium text-[#333333] rounded-full whitespace-nowrap transition-all duration-200 hover:bg-[#F2F2F2] hover:text-black"
             >
               {link.label}
             </a>
@@ -98,13 +96,14 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* COLONNE 3 — GLOBE + LANGUE + CTA (droite) */}
-        <div className="justify-self-end flex items-center gap-3 md:gap-3">
+        <div className="ml-auto flex-shrink-0 flex items-center gap-3 md:gap-3">
           {/* Language Dropdown (desktop uniquement) */}
           <div className="hidden md:block">
             <DropdownMenu
               trigger={
                 <button
-                  className="flex items-center gap-1.5 px-3.5 py-2 h-10 border-[1.5px] border-[#E8E8E8] rounded-full text-[14px] font-medium text-[#333] hover:border-[#D0D0D0] transition-colors duration-200"
+                  className="flex items-center justify-center gap-2 px-6 bg-white text-[#333] border-[1.5px] border-[#E8E8E8] rounded-lg text-[14px] font-medium transition-colors duration-200 hover:border-[#D0D0D0]"
+                  style={{height: '60px'}}
                   aria-label="Select language"
                 >
                   <svg
@@ -140,7 +139,8 @@ export const Navbar: React.FC = () => {
           {/* CTA Button */}
           <button
             onClick={handleCTAClick}
-            className="hidden md:block bg-[#1A1A1A] text-white rounded-full px-6 h-11 text-[15px] font-bold transition-colors duration-200 hover:bg-black"
+            className="hidden md:flex md:items-center bg-[#1A1A1A] text-white rounded-lg px-6 text-[15px] font-bold transition-colors duration-200 hover:bg-black"
+            style={{height: '60px'}}
           >
             Rejoindre la liste
           </button>

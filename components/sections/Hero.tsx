@@ -1,348 +1,220 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
 
 interface DogCard {
-  id: number;
   name: string;
   age: number;
-  breed: string;
-  tags: string[];
   image: string;
-  fallbackColor: string;
+  fallbackGradient: string;
 }
 
 const dogCards: DogCard[] = [
   {
-    id: 1,
-    name: "Luna",
-    age: 2,
-    breed: "Dachshund",
-    tags: ["Energique", "Aime les câlins"],
-    image: "/dogs/dog2.jpg",
-    fallbackColor: "from-orange-200 to-amber-100",
+    name: "Josh",
+    age: 27,
+    image: "/assets/photos/homme1.png",
+    fallbackGradient: "from-rawr-purple-lt to-rawr-purple",
   },
   {
-    id: 2,
-    name: "Max",
-    age: 3,
-    breed: "Golden Retriever",
-    tags: ["Joueur", "Adore les parcs"],
-    image: "/dogs/labrador.png",
-    fallbackColor: "from-yellow-100 to-orange-100",
+    name: "Dana",
+    age: 29,
+    image: "/assets/photos/femme1.png",
+    fallbackGradient: "from-rawr-beige to-rawr-brown",
   },
   {
-    id: 3,
-    name: "Rocky",
-    age: 4,
-    breed: "German Shepherd",
-    tags: ["Loyal", "Très intelligent"],
-    image: "/assets/photos/chien_noir_frontpage.png",
-    fallbackColor: "from-amber-100 to-yellow-100",
+    name: "Ele",
+    age: 33,
+    image: "/assets/photos/femme2.png",
+    fallbackGradient: "from-rawr-purple to-rawr-purple-lt",
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
+interface Transform {
+  y: number;
+  x: number;
+  scale: number;
+  rotate: number;
+  zIndex: number;
+}
+
+const getCardTransform = (cardIndex: number, hoveredCard: number | null): Transform => {
+  // État de repos (aucun hover)
+  if (hoveredCard === null) {
+    if (cardIndex === 0) return { y: 20, x: 0, scale: 1, rotate: -12, zIndex: 11 };
+    if (cardIndex === 1) return { y: -10, x: 0, scale: 1.05, rotate: 0, zIndex: 13 };
+    return { y: 30, x: 0, scale: 1, rotate: 10, zIndex: 12 };
+  }
+
+  // Hover sur card 0 (gauche)
+  if (hoveredCard === 0) {
+    if (cardIndex === 0) return { y: -60, x: -30, scale: 1.08, rotate: -6, zIndex: 20 };
+    if (cardIndex === 1) return { y: 10, x: 30, scale: 1, rotate: 4, zIndex: 13 };
+    return { y: 40, x: 20, scale: 0.97, rotate: 13, zIndex: 12 };
+  }
+
+  // Hover sur card 1 (centre)
+  if (hoveredCard === 1) {
+    if (cardIndex === 0) return { y: 30, x: -40, scale: 0.97, rotate: -16, zIndex: 11 };
+    if (cardIndex === 1) return { y: -70, x: 0, scale: 1.1, rotate: 0, zIndex: 20 };
+    return { y: 45, x: 40, scale: 0.97, rotate: 14, zIndex: 12 };
+  }
+
+  // Hover sur card 2 (droite)
+  if (cardIndex === 0) return { y: 30, x: -20, scale: 0.97, rotate: -14, zIndex: 11 };
+  if (cardIndex === 1) return { y: 10, x: -30, scale: 1, rotate: -4, zIndex: 13 };
+  return { y: -60, x: 30, scale: 1.08, rotate: 5, zIndex: 20 };
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6 },
-  },
-};
-
-const cardStackVariants = {
-  hidden: { opacity: 0, x: 40 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, delay: 0.4 },
-  },
+const springTransition = {
+  y: { type: "spring" as const, stiffness: 350, damping: 28, mass: 0.8 },
+  x: { type: "spring" as const, stiffness: 300, damping: 25, mass: 0.8 },
+  scale: { type: "spring" as const, stiffness: 400, damping: 30 },
+  rotate: { type: "spring" as const, stiffness: 250, damping: 22, mass: 1.0 },
 };
 
 export const Hero: React.FC = () => {
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
-  const handleImageError = (id: number) => {
-    setImageErrors((prev) => ({ ...prev, [id]: true }));
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+  const handleImageError = (idx: number) => {
+    setImageErrors((prev) => ({ ...prev, [idx]: true }));
   };
 
   return (
-    <section className="relative min-h-screen bg-rawr-white border-2 border-rawr-black pt-[clamp(60px,10vw,100px)] pb-[clamp(60px,10vw,100px)]">
-      {/* Paw print decorations */}
-      <div className="absolute top-12 left-8 text-rawr-black opacity-[0.04] text-3xl select-none pointer-events-none">
-        🐾
-      </div>
-      <div className="absolute top-1/3 right-12 text-rawr-black opacity-[0.04] text-3xl select-none pointer-events-none">
-        🐾
-      </div>
-      <div className="absolute bottom-20 left-1/4 text-rawr-black opacity-[0.04] text-3xl select-none pointer-events-none">
-        🐾
-      </div>
-
-      <Container className="h-full">
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-[55%_45%] gap-12 md:gap-8 items-center min-h-[600px] md:min-h-screen"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+    <section className="relative min-h-screen overflow-hidden flex flex-col justify-between pt-24 md:pt-0" style={{ backgroundColor: "#fce3fa", marginTop: "-115px" }}>
+      {/* Titre géant RAWR - position absolute devant les cartes */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <h1
+          className="font-display font-bold whitespace-nowrap"
+          style={{
+            fontSize: "clamp(180px, 22vw, 320px)",
+            lineHeight: 0.9,
+            letterSpacing: "-0.04em",
+            color: "#2ecca2",
+          }}
         >
-          {/* Left Column */}
-          <div className="flex flex-col justify-center space-y-6">
-            {/* Badge */}
-            <motion.div
-              variants={itemVariants}
-              className="w-fit"
-            >
-              <span className="inline-block bg-rawr-beige text-rawr-brown text-[13px] font-[500] px-4 py-2 rounded-pill">
-                🐾 Bientôt disponible à Paris
-              </span>
-            </motion.div>
+          Rawr.
+        </h1>
+      </motion.div>
 
-            {/* Headline */}
-            <motion.div variants={itemVariants} className="space-y-1">
-              <h1 className="font-display font-bold text-rawr-black leading-[1.05]"
-                style={{ fontSize: "clamp(40px, 6vw, 80px)" }}>
-                Swipe le chien.
-              </h1>
-              <h1 className="font-display font-bold text-rawr-black leading-[1.05] pl-[1em]"
-                style={{ fontSize: "clamp(40px, 6vw, 80px)" }}>
-                Rencontre l'humain.
-              </h1>
-            </motion.div>
+      {/* Cards en éventail - z-index 10 (derrière le titre) */}
+      <motion.div
+        className="relative z-10 flex items-center justify-center flex-1 px-4"
+        style={{ perspective: "800px" }}
+      >
+        <div className="relative w-full flex items-flex-end justify-center gap-0">
+          {dogCards.map((card, idx) => {
+            const transform = getCardTransform(idx, hoveredCard);
+            const hasError = imageErrors[idx];
+            const isHovered = hoveredCard === idx;
+            const animationDelay = idx === 0 ? 0.2 : idx === 1 ? 0.35 : 0.5;
 
-            {/* Subtitle */}
-            <motion.p
-              variants={itemVariants}
-              className="text-rawr-black opacity-70 text-[18px] leading-[1.6] max-w-[480px]"
-            >
-              L'app de rencontres pour propriétaires de chiens. Swipez sur les
-              profils de leurs chiens — la vraie magie commence au match.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4 pt-4"
-            >
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() => {
-                  /* App download logic */
+            return (
+              <motion.div
+                key={idx}
+                className={`relative flex-shrink-0 aspect-[2/3] rounded-[20px] overflow-hidden cursor-pointer transition-shadow duration-300 ${
+                  isHovered
+                    ? "shadow-[0_32px_80px_rgba(0,0,0,0.22)]"
+                    : "shadow-[0_16px_48px_rgba(0,0,0,0.12)]"
+                }`}
+                style={{
+                  width: "clamp(180px, 15vw, 260px)",
+                  transformOrigin: "bottom center",
                 }}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                  scale: transform.scale,
+                  rotate: transform.rotate + (idx === 0 ? -8 : idx === 2 ? 8 : 0),
+                }}
+                animate={{
+                  opacity: 1,
+                  y: transform.y,
+                  x: transform.x,
+                  scale: transform.scale,
+                  rotate: transform.rotate,
+                  zIndex: transform.zIndex,
+                }}
+                transition={{
+                  opacity: { duration: 0.6, delay: animationDelay, ease: "easeOut" },
+                  ...springTransition,
+                }}
+                onMouseEnter={() => setHoveredCard(idx)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
-                Télécharger l'app
-              </Button>
-              <Button
-                variant="secondary"
-                size="lg"
-                onClick={() => scrollToSection("how-it-works")}
-              >
-                Comment ça marche →
-              </Button>
-            </motion.div>
-
-            {/* Social Proof */}
-            <motion.div
-              variants={itemVariants}
-              className="flex items-center gap-3 pt-6"
-            >
-              <div className="flex -space-x-3">
-                {["🐶", "🦮", "🐕", "🐩"].map((emoji, i) => (
+                {/* Card Image or Fallback */}
+                {!hasError && card.image ? (
+                  <img
+                    src={card.image}
+                    alt={`${card.name}, ${card.age} ans`}
+                    className="w-full h-full object-cover"
+                    onError={() => handleImageError(idx)}
+                  />
+                ) : (
                   <div
-                    key={i}
-                    className="w-10 h-10 rounded-full bg-rawr-beige border-2 border-rawr-white flex items-center justify-center text-lg"
-                    style={{ zIndex: i }}
+                    className={`w-full h-full bg-gradient-to-b ${card.fallbackGradient} flex items-center justify-center text-6xl`}
                   >
-                    {emoji}
+                    🐕
                   </div>
-                ))}
-              </div>
-              <p className="text-rawr-brown font-[500] text-[14px]">
-                10 000+ dog owners already waiting
-              </p>
-            </motion.div>
-          </div>
+                )}
 
-          {/* Right Column - Card Stack */}
-          <motion.div
-            variants={cardStackVariants}
-            className="relative hidden md:flex items-center justify-center h-full"
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                {/* Card Label */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-4 text-white">
+                  <p className="font-body font-semibold text-sm md:text-base">
+                    {card.name}, {card.age} ans
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      {/* Contenu bas - gradient fade + subtitle + CTA - z-index 30 */}
+      <div className="relative z-30 pt-12 pb-12 md:pb-20 px-4" style={{ background: "linear-gradient(180deg, rgba(252, 227, 250, 0) 0%, rgba(252, 227, 250, 0.95) 100%)" }}>
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          {/* Sous-titre gauche */}
+          <motion.p
+            className="font-body font-bold text-lg md:text-xl text-[#444] leading-relaxed max-w-sm"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
           >
-            <div className="relative w-[320px] h-[420px] md:w-[320px] md:h-[420px]">
-              {dogCards.map((card, idx) => {
-                const rotation = idx === 0 ? -6 : idx === 1 ? 2 : 0;
-                const translateY = idx === 0 ? 16 : idx === 1 ? 8 : 0;
-                const zIndex = idx + 1;
+            L'app de rencontres pour propriétaires de chiens.
+            <br />
+            Swipe le chien. Rencontre l'humain.
+          </motion.p>
 
-                const hasError = imageErrors[card.id];
-
-                return (
-                  <motion.div
-                    key={card.id}
-                    className={`absolute w-[280px] aspect-[3/4] rounded-card overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.12)] cursor-pointer transition-transform hover:scale-105`}
-                    style={{
-                      transform: `rotate(${rotation}deg) translateY(${translateY}px)`,
-                      zIndex: zIndex,
-                    }}
-                    animate={idx === dogCards.length - 1 ? { y: [0, -10, 0] } : {}}
-                    transition={{
-                      duration: 3,
-                      ease: "easeInOut",
-                      repeat: Infinity,
-                    }}
-                  >
-                    {/* Card Background/Image */}
-                    {!hasError && card.image ? (
-                      <Image
-                        src={card.image}
-                        alt={`${card.name}, ${card.age} ans`}
-                        fill
-                        className="object-cover"
-                        onError={() => handleImageError(card.id)}
-                      />
-                    ) : (
-                      <div
-                        className={`w-full h-full bg-gradient-to-b ${card.fallbackColor} flex items-center justify-center text-6xl`}
-                      >
-                        🐕
-                      </div>
-                    )}
-
-                    {/* Overlay Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
-
-                    {/* Card Info */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 text-rawr-white">
-                      <h3 className="font-body font-bold text-[18px]">
-                        {card.name}, {card.age} ans • {card.breed}
-                      </h3>
-                      <div className="flex gap-2 mt-3">
-                        {card.tags.map((tag, i) => (
-                          <span
-                            key={i}
-                            className="bg-white bg-opacity-30 text-rawr-white text-[12px] font-[500] px-3 py-1 rounded-pill"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Action Buttons - Top Card Only */}
-                    {idx === dogCards.length - 1 && (
-                      <div className="absolute bottom-6 left-6 right-6 flex justify-between px-2">
-                        <button
-                          className="w-12 h-12 rounded-full bg-rawr-white shadow-card flex items-center justify-center text-[20px] text-[#666] hover:shadow-card-hover transition-shadow"
-                          aria-label="Dislike"
-                        >
-                          ✕
-                        </button>
-                        <button
-                          className="w-12 h-12 rounded-full bg-rawr-purple shadow-card flex items-center justify-center text-[20px] hover:shadow-glow transition-shadow"
-                          aria-label="Like"
-                        >
-                          ❤️
-                        </button>
-                      </div>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-
-          {/* Mobile Card Stack */}
-          <motion.div
-            variants={cardStackVariants}
-            className="md:hidden flex items-center justify-center w-full"
+          {/* CTA Button droite */}
+          <motion.button
+            className="rounded-full px-8 py-4 font-body font-bold text-base md:text-lg whitespace-nowrap transition-all duration-200"
+            style={{
+              backgroundColor: "#fce3fa",
+              color: "#2ecca2",
+              border: "2px solid #2ecca2",
+            }}
+            whileHover={{
+              backgroundColor: "#ffffff",
+              boxShadow: "0_8px_24px_rgba(46,202,162,0.2)",
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
           >
-            <div className="relative w-[260px] h-[345px]">
-              {dogCards.map((card, idx) => {
-                const rotation = idx === 0 ? -6 : idx === 1 ? 2 : 0;
-                const translateY = idx === 0 ? 16 : idx === 1 ? 8 : 0;
-                const zIndex = idx + 1;
-
-                const hasError = imageErrors[card.id];
-
-                return (
-                  <motion.div
-                    key={card.id}
-                    className={`absolute w-[230px] aspect-[3/4] rounded-card overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.12)]`}
-                    style={{
-                      transform: `rotate(${rotation}deg) translateY(${translateY}px)`,
-                      zIndex: zIndex,
-                    }}
-                    animate={idx === dogCards.length - 1 ? { y: [0, -10, 0] } : {}}
-                    transition={{
-                      duration: 3,
-                      ease: "easeInOut",
-                      repeat: Infinity,
-                    }}
-                  >
-                    {!hasError && card.image ? (
-                      <Image
-                        src={card.image}
-                        alt={`${card.name}, ${card.age} ans`}
-                        fill
-                        className="object-cover"
-                        onError={() => handleImageError(card.id)}
-                      />
-                    ) : (
-                      <div
-                        className={`w-full h-full bg-gradient-to-b ${card.fallbackColor} flex items-center justify-center text-6xl`}
-                      >
-                        🐕
-                      </div>
-                    )}
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
-
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-rawr-white">
-                      <h3 className="font-body font-bold text-[16px]">
-                        {card.name}, {card.age} ans
-                      </h3>
-                      <div className="flex gap-2 mt-2">
-                        {card.tags.map((tag, i) => (
-                          <span
-                            key={i}
-                            className="bg-white bg-opacity-30 text-rawr-white text-[11px] font-[500] px-2 py-1 rounded-pill"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-        </motion.div>
-      </Container>
+            Rejoindre la liste d'attente →
+          </motion.button>
+        </div>
+      </div>
     </section>
   );
 };

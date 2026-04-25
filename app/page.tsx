@@ -1,11 +1,11 @@
 import { Navbar, Footer } from "@/components/layout";
-import { Hero, Histoire, CTADownload, Mission, HowItWorks } from "@/components/sections";
+import { Hero, CTADownload, Mission, HowItWorks } from "@/components/sections";
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="pt-[72px]">
+      <main className="pt-28">
         {/* Hero Section */}
         <section id="hero">
           <Hero />
@@ -21,13 +21,8 @@ export default function Home() {
           <HowItWorks />
         </section>
 
-        {/* Histoire Section */}
-        <section id="histoire">
-          <Histoire />
-        </section>
-
         {/* CTA Section */}
-        <section id="download" className="py-[clamp(80px,10vw,140px)]">
+        <section id="download" className="py-0">
           <CTADownload />
         </section>
 

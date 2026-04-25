@@ -36,13 +36,16 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center"
-        aria-expanded={isOpen}
-      >
-        {trigger}
-      </button>
+      <div onClick={() => setIsOpen(!isOpen)}>
+        {React.isValidElement(trigger)
+          ? React.cloneElement(trigger as React.ReactElement<any>, {
+              onClick: (e: React.MouseEvent) => {
+                trigger.props?.onClick?.(e);
+                setIsOpen(!isOpen);
+              },
+            })
+          : trigger}
+      </div>
 
       {isOpen && (
         <div

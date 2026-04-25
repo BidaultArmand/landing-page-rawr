@@ -14,6 +14,9 @@ const config: Config = {
         "rawr-brown": "#6A4125",
         "rawr-black": "#000000",
         "rawr-white": "#FFFFFF",
+        "rawr-accent": "#2ecca2",
+        "rawr-bg-light": "#fce3fa",
+        "rawr-accent-light": "#ef8adc",
       },
       fontFamily: {
         display: ["Playfair Display", "serif"],
